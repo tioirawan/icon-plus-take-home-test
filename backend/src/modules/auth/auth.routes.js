@@ -6,6 +6,9 @@ import { loginSchema, refreshSchema } from './auth.validation.js';
 
 const router = Router();
 
+// POST /v1/auth/register
+router.post('/register', validateRequest(registerSchema), authController.register);
+
 // POST /v1/auth/login
 router.post('/login', validateRequest(loginSchema), authController.login);
 

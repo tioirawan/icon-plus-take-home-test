@@ -3,6 +3,37 @@ import ApiError from '../../utils/apiError.js';
 import { createAccessToken, createRefreshToken, verifyJwt } from '../../utils/jwt.utils.js';
 import { comparePassword } from '../../utils/password.utils.js';
 
+export async function registerUser({ name, email, password }) {
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (existingUser) {
+    throw new ApiError(409, 'AUTH_EMAIL_IN_USE', 'An account with this email already exists.');
+  }
+
+  const passwordHash = await hashPassword(password);
+
+  const newUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      passwordHash,
+    },
+  });
+
+  const accessToken = createAccessToken(newUser);
+  const refreshToken = createRefreshToken(newUser);
+
+  const { passwordHash: _, refreshTokenVersion: __, ...userResponse } = newUser;
+
+  return {
+    accessToken,
+    refreshToken,
+    user: userResponse,
+  };
+}
+
 export async function loginUser(email, password) {
   const user = await prisma.user.findUnique({
     where: { email },
