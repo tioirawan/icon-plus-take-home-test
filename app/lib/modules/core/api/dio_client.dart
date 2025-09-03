@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:icon_plus_app/modules/auth/domain/repositories/token_repository.dart';
 import 'package:icon_plus_app/modules/core/api/auth_interceptor.dart';
 import 'package:injectable/injectable.dart';
@@ -24,8 +25,7 @@ class DioClient {
 
     _dio.interceptors.addAll([
       AuthInterceptor(_tokenRepository),
-      // if (kDebugMode)
-      // LogInterceptor(requestBody: true, responseBody: true),
+      if (kDebugMode) LogInterceptor(requestBody: true, responseBody: true),
     ]);
   }
 }

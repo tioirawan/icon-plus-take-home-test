@@ -35,10 +35,18 @@ import 'package:icon_plus_app/modules/profile/data/repositories/profile_reposito
     as _i471;
 import 'package:icon_plus_app/modules/profile/domain/repositories/profile_repository.dart'
     as _i589;
+import 'package:icon_plus_app/modules/profile/domain/usecases/change_password_usecase.dart'
+    as _i343;
 import 'package:icon_plus_app/modules/profile/domain/usecases/get_profile_usecase.dart'
     as _i920;
 import 'package:icon_plus_app/modules/profile/domain/usecases/logout_usecase.dart'
     as _i1025;
+import 'package:icon_plus_app/modules/profile/domain/usecases/update_profile_usecase.dart'
+    as _i670;
+import 'package:icon_plus_app/modules/profile/presentation/blocs/change_password_bloc/change_password_bloc.dart'
+    as _i322;
+import 'package:icon_plus_app/modules/profile/presentation/blocs/edit_profile_bloc/edit_profile_bloc.dart'
+    as _i451;
 import 'package:icon_plus_app/modules/profile/presentation/blocs/profile_bloc/profile_bloc.dart'
     as _i458;
 import 'package:injectable/injectable.dart' as _i526;
@@ -72,17 +80,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i243.AuthRemoteDataSource>(
       () => _i243.AuthRemoteDataSourceImpl(gh<_i105.DioClient>()),
     );
+    gh.factory<_i1025.LogoutUseCase>(
+      () => _i1025.LogoutUseCase(gh<_i589.ProfileRepository>()),
+    );
     gh.factory<_i920.GetProfileUseCase>(
       () => _i920.GetProfileUseCase(gh<_i589.ProfileRepository>()),
     );
-    gh.factory<_i1025.LogoutUseCase>(
-      () => _i1025.LogoutUseCase(gh<_i589.ProfileRepository>()),
+    gh.factory<_i670.UpdateProfileUseCase>(
+      () => _i670.UpdateProfileUseCase(gh<_i589.ProfileRepository>()),
+    );
+    gh.factory<_i343.ChangePasswordUseCase>(
+      () => _i343.ChangePasswordUseCase(gh<_i589.ProfileRepository>()),
     );
     gh.lazySingleton<_i331.AuthRepository>(
       () => _i133.AuthRepositoryImpl(gh<_i243.AuthRemoteDataSource>()),
     );
     gh.factory<_i337.LoginUseCase>(
       () => _i337.LoginUseCase(gh<_i331.AuthRepository>()),
+    );
+    gh.factory<_i451.EditProfileBloc>(
+      () => _i451.EditProfileBloc(gh<_i670.UpdateProfileUseCase>()),
+    );
+    gh.factory<_i322.ChangePasswordBloc>(
+      () => _i322.ChangePasswordBloc(gh<_i343.ChangePasswordUseCase>()),
     );
     gh.factory<_i87.LoginBloc>(
       () =>

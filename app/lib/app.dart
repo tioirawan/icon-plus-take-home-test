@@ -10,8 +10,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthBloc>()..add(AuthStatusChecked()),
+    return BlocProvider.value(
+      value: getIt<AuthBloc>(),
       child: const _AppView(),
     );
   }

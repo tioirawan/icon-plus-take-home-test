@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icon_plus_app/modules/auth/domain/entities/user.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
+import 'package:icon_plus_app/modules/core/router/app_router.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
 import 'package:icon_plus_app/modules/core/theme/app_text_styles.dart';
 import 'package:icon_plus_app/modules/core/utils/space_helpers.dart';
@@ -54,7 +56,9 @@ class _ProfileSuccessView extends StatelessWidget {
           24.heightBox,
           CircleAvatar(
             radius: 50,
-            backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+            backgroundColor: Theme.of(
+              context,
+            ).primaryColor.withValues(alpha: 0.1),
             child: Text(
               user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
               style: AppTextStyles.heading1.copyWith(
@@ -113,8 +117,15 @@ class _ProfileSuccessView extends StatelessWidget {
             leading: const Icon(CupertinoIcons.pencil),
             title: const Text('Edit Profile'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              // TODO: Navigate to Edit Profile Page
+            onTap: () async {
+              final result = await context.push<bool>(
+                AppRouter.editProfile,
+                extra: user,
+              );
+
+              if (result == true && context.mounted) {
+                context.read<ProfileBloc>().add(ProfileFetched());
+              }
             },
           ),
           const Divider(height: 1, indent: 16, endIndent: 16),
@@ -123,7 +134,7 @@ class _ProfileSuccessView extends StatelessWidget {
             title: const Text('Change Password'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              // TODO: Navigate to Change Password Page
+              context.push(AppRouter.changePassword);
             },
           ),
           const Divider(height: 1, indent: 16, endIndent: 16),
