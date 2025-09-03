@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import ApiError from './apiError.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const ACCESS_TOKEN_TTL = process.env.ACCESS_TOKEN_TTL || '15m';

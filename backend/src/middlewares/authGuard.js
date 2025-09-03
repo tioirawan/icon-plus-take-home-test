@@ -26,7 +26,7 @@ const authGuard = async (req, res, next) => {
     // sanitize and attach to request
     const { passwordHash, ...safeUser } = user;
     req.user = safeUser;
-    
+
     next();
   } catch (error) {
     next(error);
