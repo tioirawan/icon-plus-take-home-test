@@ -1,57 +1,58 @@
 name: icon-plus-app
 
 services:
+  db:
+    image: mysql:8
+    container_name: iconplus-mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=iconplus_db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+      - iconplus_network
+
   app:
     build:
       context: .
     container_name: iconplus-app
     restart: unless-stopped
     ports:
-      - "10110:8080"
+      - "10140:8080"
     env_file:
       - .env.production
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_healthy   # <- penting
     networks:
       - iconplus_network
-
-  db:
-    image: mysql:8.0
-    container_name: iconplus-mysql
-    restart: unless-stopped
-    env_file:
-      - .env.production
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - iconplus_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   db-admin:
     image: phpmyadmin:latest
     container_name: iconplus-phpmyadmin
     restart: unless-stopped
     ports:
-      - "10111:80"
+      - "10141:80"
     environment:
-      - PMA_HOST=db # Connect to the 'db' service
+      - PMA_HOST=db
       - PMA_PORT=3306
     depends_on:
       db:
         condition: service_healthy
     networks:
       - iconplus_network
-
-# Named volumes for data persistence
+      
 volumes:
   mysql_data:
 
-# The network for inter-service communication
 networks:
   iconplus_network:
     driver: bridge
