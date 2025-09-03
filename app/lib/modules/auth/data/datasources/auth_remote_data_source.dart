@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:icon_plus_app/modules/auth/data/models/login_request_dto.dart';
 import 'package:icon_plus_app/modules/auth/data/models/login_response_dto.dart';
 import 'package:icon_plus_app/modules/auth/data/models/refresh_token_dto.dart';
+import 'package:icon_plus_app/modules/auth/data/models/register_request_dto.dart';
 import 'package:icon_plus_app/modules/core/api/api_exceptions.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseDto> login(LoginRequestDto request);
+  Future<LoginResponseDto> register(RegisterRequestDto request);
   Future<RefreshTokenResponseDto> refresh(RefreshTokenRequestDto request);
 }
 
@@ -32,6 +34,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         "Something went wrong. Please check your connection.",
         statusCode: e.response?.statusCode,
       );
+    }
+  }
+
+  @override
+  Future<LoginResponseDto> register(RegisterRequestDto request) async {
+    try {
+      final response = await _dio.post(
+        '/auth/register',
+        data: request.toJson(),
+      );
+      return LoginResponseDto.fromJson(response.data);
+    } on DioException catch (e) {
+      final message =
+          e.response?.data['message'] ??
+          "Registration failed. Please try again.";
+      throw ApiException(message, statusCode: e.response?.statusCode);
     }
   }
 

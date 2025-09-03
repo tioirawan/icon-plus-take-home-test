@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:icon_plus_app/modules/auth/domain/entities/user.dart';
 import 'package:icon_plus_app/modules/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:icon_plus_app/modules/auth/presentation/pages/login_page.dart';
+import 'package:icon_plus_app/modules/auth/presentation/pages/register_page.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
 import 'package:icon_plus_app/modules/core/presentation/pages/splash_page.dart';
 import 'package:icon_plus_app/modules/core/utils/stream_to_listenable.dart';
@@ -12,6 +13,7 @@ import 'package:icon_plus_app/modules/profile/presentation/pages/profile_page.da
 class AppRouter {
   static const String splash = '/';
   static const String login = '/login';
+  static const String register = '/register';
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
   static const String changePassword = '/profile/change-password';
@@ -41,8 +43,10 @@ class AppRouter {
         return profile;
       }
 
+      final onRegisterPage = state.matchedLocation == register;
       // Handle cases where a logged-out user tries to access a protected page.
-      if (authState.status == AuthStatus.unauthenticated && !onLoginPage) {
+      if (authState.status == AuthStatus.unauthenticated &&
+          !(onLoginPage || onRegisterPage)) {
         return login;
       }
 
@@ -53,6 +57,11 @@ class AppRouter {
         path: splash,
         name: splash,
         builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: register,
+        name: register,
+        builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(
         path: login,

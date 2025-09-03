@@ -24,10 +24,14 @@ import 'package:icon_plus_app/modules/auth/domain/repositories/token_repository.
     as _i743;
 import 'package:icon_plus_app/modules/auth/domain/usecases/login_usecase.dart'
     as _i337;
+import 'package:icon_plus_app/modules/auth/domain/usecases/register_usecase.dart'
+    as _i887;
 import 'package:icon_plus_app/modules/auth/presentation/blocs/auth_bloc/auth_bloc.dart'
     as _i667;
 import 'package:icon_plus_app/modules/auth/presentation/blocs/login_bloc/login_bloc.dart'
     as _i87;
+import 'package:icon_plus_app/modules/auth/presentation/blocs/register_bloc/register_bloc.dart'
+    as _i598;
 import 'package:icon_plus_app/modules/core/di/register_module.dart' as _i290;
 import 'package:icon_plus_app/modules/profile/data/datasources/profile_remote_data_source.dart'
     as _i203;
@@ -82,6 +86,15 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i337.LoginUseCase>(
       () => _i337.LoginUseCase(gh<_i331.AuthRepository>()),
+    );
+    gh.factory<_i887.RegisterUseCase>(
+      () => _i887.RegisterUseCase(gh<_i331.AuthRepository>()),
+    );
+    gh.factory<_i598.RegisterBloc>(
+      () => _i598.RegisterBloc(
+        gh<_i887.RegisterUseCase>(),
+        gh<_i743.TokenRepository>(),
+      ),
     );
     gh.factory<_i87.LoginBloc>(
       () =>

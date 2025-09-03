@@ -1,6 +1,7 @@
 import 'package:icon_plus_app/modules/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:icon_plus_app/modules/auth/data/models/login_request_dto.dart';
 import 'package:icon_plus_app/modules/auth/data/models/refresh_token_dto.dart';
+import 'package:icon_plus_app/modules/auth/data/models/register_request_dto.dart';
 import 'package:icon_plus_app/modules/auth/domain/entities/login_result.dart';
 import 'package:icon_plus_app/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -18,6 +19,21 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     final requestDto = LoginRequestDto(email: email, password: password);
     final responseDto = await _remoteDataSource.login(requestDto);
+    return responseDto.toDomain();
+  }
+  
+  @override
+  Future<LoginResult> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    final requestDto = RegisterRequestDto(
+      name: name,
+      email: email,
+      password: password,
+    );
+    final responseDto = await _remoteDataSource.register(requestDto);
     return responseDto.toDomain();
   }
 

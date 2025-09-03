@@ -16,7 +16,6 @@ export const changePasswordSchema = z.object({
     newPassword: z
       .string()
       .min(8, 'New password must be at least 8 characters long')
-      .regex(/[a-zA-Z]/, 'New password must contain at least one letter')
-      .regex(/[0-9]/, 'New password must contain at least one number'),
+      .regex(/[a-zA-Z]/, 'New password must contain at least one letter'),
   }),
 });
