@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:icon_plus_app/modules/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:icon_plus_app/modules/auth/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:icon_plus_app/modules/auth/presentation/widgets/login_form.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
-import 'package:icon_plus_app/modules/core/router/app_router.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
 
 class LoginPage extends StatelessWidget {
@@ -18,11 +17,9 @@ class LoginPage extends StatelessWidget {
         child: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state.status == LoginStatus.success) {
-              // Navigate to profile on success
-              context.go(AppRouter.profile);
+              context.read<AuthBloc>().add(AuthLoginSuccess());
             }
             if (state.status == LoginStatus.failure) {
-              // Show error snackbar
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
