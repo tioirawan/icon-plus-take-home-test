@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icon_plus_app/modules/auth/domain/entities/user.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
 import 'package:icon_plus_app/modules/core/router/app_router.dart';
+import 'package:icon_plus_app/modules/core/theme/app_colors.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
 import 'package:icon_plus_app/modules/core/theme/app_text_styles.dart';
 import 'package:icon_plus_app/modules/core/utils/space_helpers.dart';
 import 'package:icon_plus_app/modules/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
-import 'package:icon_plus_app/modules/profile/presentation/widgets/profile_info_tile.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -19,7 +19,11 @@ class ProfilePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<ProfileBloc>()..add(ProfileFetched()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('My Profile')),
+        appBar: AppBar(
+          title: Text('My Profile', style: AppTextStyles.title),
+          backgroundColor: AppColors.background,
+        ),
+        backgroundColor: AppColors.background,
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             switch (state.status) {
@@ -52,101 +56,121 @@ class _ProfileSuccessView extends StatelessWidget {
     return SingleChildScrollView(
       padding: AppDimensions.pagePadding,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          24.heightBox,
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Theme.of(
-              context,
-            ).primaryColor.withValues(alpha: 0.1),
-            child: Text(
-              user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
-              style: AppTextStyles.heading1.copyWith(
-                color: Theme.of(context).primaryColor,
-              ),
+          Center(
+            child: Column(
+              children: [
+                24.heightBox,
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                  child: Text(
+                    user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
+                    style: AppTextStyles.heading1.copyWith(
+                      color: AppColors.primary,
+                      fontSize: 40,
+                    ),
+                  ),
+                ),
+                16.heightBox,
+                Text(
+                  user.name,
+                  style: AppTextStyles.heading2.copyWith(
+                    color: AppColors.primaryDark,
+                  ),
+                ),
+                4.heightBox,
+                Text(
+                  user.email,
+                  style: AppTextStyles.caption.copyWith(fontSize: 16),
+                ),
+              ],
             ),
           ),
-          16.heightBox,
-          Text(user.name, style: AppTextStyles.heading2),
-          8.heightBox,
-          Text(user.email, style: AppTextStyles.caption.copyWith(fontSize: 16)),
+          40.heightBox,
+          const _SectionHeader(title: 'Account'),
+          12.heightBox,
+          _buildInfoSection(context),
           32.heightBox,
-          _buildInfoCard(context),
-          32.heightBox,
-          _buildActions(context),
+          const _SectionHeader(title: 'General'),
+          12.heightBox,
+          _buildActionsSection(context),
+          24.heightBox,
         ],
       ),
     );
   }
 
-  Widget _buildInfoCard(BuildContext context) {
-    return Container(
-      padding: AppDimensions.cardPadding,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: AppDimensions.borderRadiusMd,
-      ),
-      child: Column(
-        children: [
-          ProfileInfoTile(
-            icon: CupertinoIcons.briefcase_fill,
-            label: 'Jabatan',
-            value: user.jobTitle ?? '',
+  Widget _buildInfoSection(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            PhosphorIconsBold.briefcase,
+            color: AppColors.onBackground,
           ),
-          const Divider(height: 32),
-          ProfileInfoTile(
-            icon: CupertinoIcons.building_2_fill,
-            label: 'Company',
-            value: user.company ?? '',
+          title: Text('Position', style: AppTextStyles.caption),
+          subtitle: Text(user.jobTitle ?? '-', style: AppTextStyles.body),
+        ),
+
+        ListTile(
+          leading: Icon(
+            PhosphorIconsBold.buildings,
+            color: AppColors.onBackground,
           ),
-        ],
-      ),
+          title: Text('Company', style: AppTextStyles.caption),
+          subtitle: Text(user.company ?? '-', style: AppTextStyles.body),
+        ),
+      ],
     );
   }
 
-  Widget _buildActions(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: AppDimensions.borderRadiusMd,
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            leading: const Icon(CupertinoIcons.pencil),
-            title: const Text('Edit Profile'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () async {
-              final result = await context.push<bool>(
-                AppRouter.editProfile,
-                extra: user,
-              );
+  Widget _buildActionsSection(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            PhosphorIconsBold.pencilSimple,
+            color: AppColors.onBackground,
+          ),
+          title: const Text('Edit Profile'),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () async {
+            final result = await context.push<bool>(
+              AppRouter.editProfile,
+              extra: user,
+            );
+            if (result == true && context.mounted) {
+              context.read<ProfileBloc>().add(ProfileFetched());
+            }
+          },
+        ),
 
-              if (result == true && context.mounted) {
-                context.read<ProfileBloc>().add(ProfileFetched());
-              }
-            },
-          ),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(CupertinoIcons.lock_fill),
-            title: const Text('Change Password'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              context.push(AppRouter.changePassword);
-            },
-          ),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Logout', style: TextStyle(color: Colors.red)),
-            onTap: () {
-              context.read<ProfileBloc>().add(ProfileLogoutSubmitted());
-            },
-          ),
-        ],
-      ),
+        ListTile(
+          leading: Icon(PhosphorIconsBold.lock, color: AppColors.onBackground),
+          title: const Text('Change Password'),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () => context.push(AppRouter.changePassword),
+        ),
+
+        ListTile(
+          leading: Icon(PhosphorIconsBold.signOut, color: AppColors.error),
+          title: const Text('Logout', style: TextStyle(color: AppColors.error)),
+          onTap:
+              () => context.read<ProfileBloc>().add(ProfileLogoutSubmitted()),
+        ),
+      ],
     );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title, style: AppTextStyles.title.copyWith(fontSize: 18));
   }
 }

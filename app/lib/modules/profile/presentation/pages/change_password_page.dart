@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
+import 'package:icon_plus_app/modules/core/theme/app_text_styles.dart';
 import 'package:icon_plus_app/modules/core/utils/space_helpers.dart';
 import 'package:icon_plus_app/modules/profile/presentation/blocs/change_password_bloc/change_password_bloc.dart'; // This BLoC would be created
 
@@ -17,11 +18,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
+  final _newPasswordConfirmationController = TextEditingController();
 
   @override
   void dispose() {
     _currentPasswordController.dispose();
     _newPasswordController.dispose();
+    _newPasswordConfirmationController.dispose();
     super.dispose();
   }
 
@@ -65,7 +68,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(title: const Text('Change Password')),
+          appBar: AppBar(
+            title: Text('Change Password', style: AppTextStyles.title),
+          ),
           body: SingleChildScrollView(
             padding: AppDimensions.pagePadding,
             child: Form(
@@ -93,6 +98,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             (v?.length ?? 0) < 8
                                 ? 'Must be at least 8 characters'
                                 : null,
+                  ),
+                  16.heightBox,
+                  TextFormField(
+                    controller: _newPasswordConfirmationController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm New Password',
+                    ),
+                    obscureText: true,
+
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your new password';
+                      }
+                      if (value != _newPasswordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
                   ),
                   32.heightBox,
                   BlocBuilder<ChangePasswordBloc, ChangePasswordState>(

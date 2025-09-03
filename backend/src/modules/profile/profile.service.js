@@ -32,9 +32,6 @@ export async function changeUserPassword(userId, currentPassword, newPassword) {
     where: { id: userId },
     data: {
       passwordHash: newPasswordHash,
-      refreshTokenVersion: {
-        increment: 1, // invalidate refresh tokens
-      },
     },
   });
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,8 +41,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget _buildGoogleIcon() {
-    return Image.network(
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png',
+    return CachedNetworkImage(
+      imageUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png',
       height: 22.0,
       width: 22.0,
     );

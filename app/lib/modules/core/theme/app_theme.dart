@@ -52,8 +52,6 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: GoogleFonts.poppins(color: AppColors.grey1),
       hintStyle: GoogleFonts.poppins(color: AppColors.grey2),
-      filled: true,
-      fillColor: AppColors.background,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),

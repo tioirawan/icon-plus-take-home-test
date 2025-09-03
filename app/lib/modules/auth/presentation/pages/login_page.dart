@@ -4,6 +4,7 @@ import 'package:icon_plus_app/modules/auth/presentation/blocs/auth_bloc/auth_blo
 import 'package:icon_plus_app/modules/auth/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:icon_plus_app/modules/auth/presentation/widgets/login_form.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
+import 'package:icon_plus_app/modules/core/theme/app_colors.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
 
 class LoginPage extends StatelessWidget {
@@ -12,6 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundElevated,
       body: BlocProvider(
         create: (_) => getIt<LoginBloc>(),
         child: BlocListener<LoginBloc, LoginState>(

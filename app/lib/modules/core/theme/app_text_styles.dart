@@ -15,6 +15,12 @@ class AppTextStyles {
     color: AppColors.black,
   );
 
+  static final TextStyle title = GoogleFonts.poppins(
+    fontSize: 22,
+    fontWeight: FontWeight.w600,
+    color: AppColors.black,
+  );
+
   static final TextStyle body = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.normal,

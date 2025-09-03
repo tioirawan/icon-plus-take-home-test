@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:icon_plus_app/modules/auth/domain/entities/user.dart';
 import 'package:icon_plus_app/modules/core/di/di.dart';
 import 'package:icon_plus_app/modules/core/theme/app_dimensions.dart';
+import 'package:icon_plus_app/modules/core/theme/app_text_styles.dart';
 import 'package:icon_plus_app/modules/core/utils/space_helpers.dart';
 import 'package:icon_plus_app/modules/profile/presentation/blocs/edit_profile_bloc/edit_profile_bloc.dart';
 
@@ -61,7 +62,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 const SnackBar(
-                  content: Text("Your profile's looking fresh ✨"),
+                  content: Text("Your profile has been updated!"),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -79,7 +80,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(title: const Text('Edit Profile')),
+          appBar: AppBar(
+            title: Text('Edit Profile', style: AppTextStyles.title),
+          ),
           body: SingleChildScrollView(
             padding: AppDimensions.pagePadding,
             child: Form(

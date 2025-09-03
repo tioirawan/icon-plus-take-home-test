@@ -13,7 +13,8 @@ class AppColors {
   static const Color grey4 = Color(0xFFD1D1D6);
   static const Color grey5 = Color(0xFFE5E5EA);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color background = Color(0xFFDEE7E9);
+  static const Color background = Colors.white;
+  static const Color backgroundElevated = Color(0xFFEAF0F2);
   static const Color onBackground = Color(0xFF1E1E1E);
 
   // Semantic

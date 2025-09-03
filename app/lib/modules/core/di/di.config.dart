@@ -91,7 +91,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.dio(
         gh<_i361.Dio>(instanceName: 'baseDio'),
         gh<_i743.TokenRepository>(),
-        gh<_i331.AuthRepository>(),
         gh<_i667.AuthBloc>(),
       ),
     );
@@ -101,14 +100,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i589.ProfileRepository>(
       () => _i471.ProfileRepositoryImpl(gh<_i203.ProfileRemoteDataSource>()),
     );
+    gh.factory<_i670.UpdateProfileUseCase>(
+      () => _i670.UpdateProfileUseCase(gh<_i589.ProfileRepository>()),
+    );
     gh.factory<_i1025.LogoutUseCase>(
       () => _i1025.LogoutUseCase(gh<_i589.ProfileRepository>()),
     );
     gh.factory<_i920.GetProfileUseCase>(
       () => _i920.GetProfileUseCase(gh<_i589.ProfileRepository>()),
-    );
-    gh.factory<_i670.UpdateProfileUseCase>(
-      () => _i670.UpdateProfileUseCase(gh<_i589.ProfileRepository>()),
     );
     gh.factory<_i343.ChangePasswordUseCase>(
       () => _i343.ChangePasswordUseCase(gh<_i589.ProfileRepository>()),
