@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:icon_plus_app/modules/core/theme/app_colors.dart';
 
 class AppTextStyles {
-  static const TextStyle heading1 = TextStyle(
+  static final TextStyle heading1 = GoogleFonts.poppins(
     fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.black,
   );
 
-  static const TextStyle heading2 = TextStyle(
+  static final TextStyle heading2 = GoogleFonts.poppins(
     fontSize: 22,
     fontWeight: FontWeight.bold,
     color: AppColors.black,
   );
 
-  static const TextStyle body = TextStyle(
+  static final TextStyle body = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.black,
   );
 
-  static const TextStyle bodyBold = TextStyle(
+  static final TextStyle bodyBold = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.black,
   );
 
-  static const TextStyle caption = TextStyle(
+  static final TextStyle caption = GoogleFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     color: AppColors.grey1,
   );
 
-  static const TextStyle button = TextStyle(
+  static final TextStyle button = GoogleFonts.poppins(
     fontSize: 16,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     color: AppColors.white,
   );
 }

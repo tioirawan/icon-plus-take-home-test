@@ -24,7 +24,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         throw ApiException(
-          "Oops! Email or password seems off. Please try again.",
+          "Oops! Email or password is wrong. Please try again.",
           statusCode: 401,
         );
       }
