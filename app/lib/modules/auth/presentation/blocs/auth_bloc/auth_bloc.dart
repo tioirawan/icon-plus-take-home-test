@@ -23,12 +23,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthStatusChecked event,
     Emitter<AuthState> emit,
   ) async {
-    // On app start, check if we have a token.
     final token = await _tokenRepository.getAccessToken();
     if (token != null) {
-      // In a real app, you'd verify the token or fetch the user profile here.
-      // For simplicity, we'll assume a token means we are logged in.
-      // The profile page will handle fetching the actual user.
       emit(const AuthState(status: AuthStatus.authenticated));
     } else {
       emit(const AuthState.unauthenticated());
@@ -43,8 +39,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
-    // Backend logout is handled in ProfileBloc/LogoutUseCase
-    // Here, we just clear local tokens and update state.
     await _tokenRepository.clearTokens();
     emit(const AuthState.unauthenticated());
   }
