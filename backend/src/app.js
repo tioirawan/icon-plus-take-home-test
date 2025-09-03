@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import apiRouter from './routes/index.js';
+import ApiError from './utils/apiError.js';
 
 const app = express();
 
@@ -21,14 +22,23 @@ app.get('/health', (req, res) => {
 app.use('/v1', apiRouter);
 
 app.use((req, res, next) => {
-  res.status(404).json({
-    code: 'NOT_FOUND',
-    message: 'The requested resource was not found on this server.'
-  });
+  next(new ApiError(404, 'NOT_FOUND', 'The requested resource was not found on this server.'));
 });
 
 app.use((err, req, res, next) => {
+  if (err instanceof ApiError) {
+    const errorResponse = {
+      code: err.code,
+      message: err.message,
+    };
+    if (err.details) {
+      errorResponse.details = err.details;
+    }
+    return res.status(err.statusCode).json(errorResponse);
+  }
+  
   console.error(err.stack);
+  
   res.status(500).json({
     code: 'INTERNAL_ERROR',
     message: 'An unexpected error occurred.'
