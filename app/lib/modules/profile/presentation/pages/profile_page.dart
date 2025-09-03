@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -65,12 +66,8 @@ class _ProfileSuccessView extends StatelessWidget {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                  child: Text(
-                    user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
-                    style: AppTextStyles.heading1.copyWith(
-                      color: AppColors.primary,
-                      fontSize: 40,
-                    ),
+                  foregroundImage: CachedNetworkImageProvider(
+                    "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww"
                   ),
                 ),
                 16.heightBox,

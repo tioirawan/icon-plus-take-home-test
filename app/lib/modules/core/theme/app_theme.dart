@@ -20,7 +20,7 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
       titleTextStyle: AppTextStyles.bodyBold,
-      iconTheme: const IconThemeData(color: AppColors.primary),
+      iconTheme: const IconThemeData(color: AppColors.primaryDark),
     ),
     textTheme: TextTheme(
       displayLarge: AppTextStyles.heading1,
