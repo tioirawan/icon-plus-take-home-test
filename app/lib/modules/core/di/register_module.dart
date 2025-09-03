@@ -15,7 +15,7 @@ abstract class RegisterModule {
   Dio get baseDio {
     return Dio(
       BaseOptions(
-        baseUrl: 'http://localhost:8080/v1',
+        baseUrl: 'https://tht-iconplus.rakit.digital/v1',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {
