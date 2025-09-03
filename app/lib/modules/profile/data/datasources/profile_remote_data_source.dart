@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:icon_plus_app/modules/auth/data/models/user_dto.dart';
 import 'package:icon_plus_app/modules/core/api/api_exceptions.dart';
-import 'package:icon_plus_app/modules/core/api/dio_client.dart';
 import 'package:icon_plus_app/modules/profile/data/models/change_password_request_dto.dart';
 import 'package:icon_plus_app/modules/profile/data/models/update_profile_request_dto.dart';
 import 'package:injectable/injectable.dart';
@@ -15,14 +14,14 @@ abstract class ProfileRemoteDataSource {
 
 @LazySingleton(as: ProfileRemoteDataSource)
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
-  final DioClient _dioClient;
+  final Dio _dio;
 
-  ProfileRemoteDataSourceImpl(this._dioClient);
+  ProfileRemoteDataSourceImpl(this._dio);
 
   @override
   Future<UserDto> getProfile() async {
     try {
-      final response = await _dioClient.dio.get('/me');
+      final response = await _dio.get('/me');
       return UserDto.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiException(
@@ -35,7 +34,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<UserDto> updateProfile(UpdateProfileRequestDto request) async {
     try {
-      final response = await _dioClient.dio.put('/me', data: request.toJson());
+      final response = await _dio.put('/me', data: request.toJson());
       return UserDto.fromJson(response.data);
     } on DioException catch (e) {
       throw ApiException(
@@ -48,7 +47,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<void> changePassword(ChangePasswordRequestDto request) async {
     try {
-      await _dioClient.dio.post('/me/change-password', data: request.toJson());
+      await _dio.post('/me/change-password', data: request.toJson());
     } on DioException catch (e) {
       throw ApiException(
         e.response?.data['message'] ?? "Failed to change password.",
@@ -60,9 +59,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<void> logout() async {
     try {
-      await _dioClient.dio.post('/auth/logout');
+      await _dio.post('/auth/logout');
     } on DioException {
-      // ignore this, but ensure token is cleared somewhere
+      // We can ignore errors here.
     }
   }
 }

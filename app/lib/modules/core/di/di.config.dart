@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:icon_plus_app/modules/auth/data/datasources/auth_remote_data_source.dart'
@@ -27,7 +28,6 @@ import 'package:icon_plus_app/modules/auth/presentation/blocs/auth_bloc/auth_blo
     as _i667;
 import 'package:icon_plus_app/modules/auth/presentation/blocs/login_bloc/login_bloc.dart'
     as _i87;
-import 'package:icon_plus_app/modules/core/api/dio_client.dart' as _i105;
 import 'package:icon_plus_app/modules/core/di/register_module.dart' as _i290;
 import 'package:icon_plus_app/modules/profile/data/datasources/profile_remote_data_source.dart'
     as _i203;
@@ -65,20 +65,41 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i743.TokenRepository>(
       () => _i444.TokenRepositoryImpl(gh<_i558.FlutterSecureStorage>()),
     );
+    gh.lazySingleton<_i361.Dio>(
+      () => registerModule.baseDio,
+      instanceName: 'baseDio',
+    );
+    gh.lazySingleton<_i243.AuthRemoteDataSource>(
+      () => _i243.AuthRemoteDataSourceImpl(
+        gh<_i361.Dio>(instanceName: 'baseDio'),
+      ),
+    );
+    gh.lazySingleton<_i331.AuthRepository>(
+      () => _i133.AuthRepositoryImpl(gh<_i243.AuthRemoteDataSource>()),
+    );
     gh.singleton<_i667.AuthBloc>(
       () => _i667.AuthBloc(gh<_i743.TokenRepository>()),
     );
-    gh.lazySingleton<_i105.DioClient>(
-      () => _i105.DioClient(gh<_i743.TokenRepository>()),
+    gh.factory<_i337.LoginUseCase>(
+      () => _i337.LoginUseCase(gh<_i331.AuthRepository>()),
+    );
+    gh.factory<_i87.LoginBloc>(
+      () =>
+          _i87.LoginBloc(gh<_i337.LoginUseCase>(), gh<_i743.TokenRepository>()),
+    );
+    gh.lazySingleton<_i361.Dio>(
+      () => registerModule.dio(
+        gh<_i361.Dio>(instanceName: 'baseDio'),
+        gh<_i743.TokenRepository>(),
+        gh<_i331.AuthRepository>(),
+        gh<_i667.AuthBloc>(),
+      ),
     );
     gh.lazySingleton<_i203.ProfileRemoteDataSource>(
-      () => _i203.ProfileRemoteDataSourceImpl(gh<_i105.DioClient>()),
+      () => _i203.ProfileRemoteDataSourceImpl(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i589.ProfileRepository>(
       () => _i471.ProfileRepositoryImpl(gh<_i203.ProfileRemoteDataSource>()),
-    );
-    gh.lazySingleton<_i243.AuthRemoteDataSource>(
-      () => _i243.AuthRemoteDataSourceImpl(gh<_i105.DioClient>()),
     );
     gh.factory<_i1025.LogoutUseCase>(
       () => _i1025.LogoutUseCase(gh<_i589.ProfileRepository>()),
@@ -92,21 +113,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i343.ChangePasswordUseCase>(
       () => _i343.ChangePasswordUseCase(gh<_i589.ProfileRepository>()),
     );
-    gh.lazySingleton<_i331.AuthRepository>(
-      () => _i133.AuthRepositoryImpl(gh<_i243.AuthRemoteDataSource>()),
-    );
-    gh.factory<_i337.LoginUseCase>(
-      () => _i337.LoginUseCase(gh<_i331.AuthRepository>()),
-    );
     gh.factory<_i451.EditProfileBloc>(
       () => _i451.EditProfileBloc(gh<_i670.UpdateProfileUseCase>()),
     );
     gh.factory<_i322.ChangePasswordBloc>(
       () => _i322.ChangePasswordBloc(gh<_i343.ChangePasswordUseCase>()),
-    );
-    gh.factory<_i87.LoginBloc>(
-      () =>
-          _i87.LoginBloc(gh<_i337.LoginUseCase>(), gh<_i743.TokenRepository>()),
     );
     gh.factory<_i458.ProfileBloc>(
       () => _i458.ProfileBloc(
